@@ -5,10 +5,14 @@ Le fichier Elec-train.xlsx contient la consommation d’électricité (kW) et la
 
 L’objectif est de prévoir la consommation d’électricité (kW) pour le 17/02/2010, puis d’obtenir la meilleure prévision possible. Il faut donc tester tous les modèles vus pendant le cours, les régler et les comparer correctement.
 
-Par conséquence, les modèles que j’ai utilisé sont : 
+Par conséquence, les modèles que j’ai utilisé sont :
+
 — Modèle Holt Winters
+
 — Modèle SARIMA
+
 — Modèle Neural network
+
 
 ## 2 Visualisation de la série et premières analyses
 
@@ -67,6 +71,7 @@ fit2 <- hw(df_app[,"Power (kW)"],damped=TRUE)
 Cepedant, ce modèle n’est pas adapté car la fréquence est trop élevée.
 
 ### 3.2 Prédictions avec SARIMA
+
 Modèle SARIMA par défaut
 ```
 fit3 <- auto.arima(df_app[,"Power (kW)"])
@@ -113,6 +118,7 @@ print(sqrt(mean((pred4$mean-df_test[,"Power (kW)"])^2)))
 On voit que ce modèle donne le meilleur résultat que le modèle SARIMA par défaut.
 
 ### 3.3 Prédictions avec Neural Network
+
 Modèle NN par défaut
 ```
 fit5 <- nnetar(df_app[,"Power (kW)"])
@@ -152,6 +158,7 @@ Comparaison entre le modèle SARIMA et NN
 On voit bien que le modèle SARIMA donne le meilleur résultat que le modèle NN. On choisit donc ce modèle.
 
 ## 4 Prédiction avec température
+
 On regarde s’il y a la corrélation entre la consommation d’électricité et la température :
 ```  
 plot(df_app[,"Power (kW)"],df_app[,"Temp (C)"])
@@ -161,6 +168,7 @@ plot(df_app[,"Power (kW)"],df_app[,"Temp (C)"])
 On voit qu’il n’y a pas vraiment de corrélation entre ces 2 variables.
  
 ### 4.1 Prédictions avec SARIMA
+
 Modèle SARIMA par défaut
 ```
 fit7 <- auto.arima(df_app[,"Power (kW)"],xreg=df_app[,"Temp (C)"])
@@ -204,6 +212,7 @@ print(sqrt(mean((pred8$mean-df_test[,"Power (kW)"])^2)))
 On voit bien que le modèle ARIMA(8,1,1)(0,1,1) donne le meilleur résultat que le modèle SARIMA par défaut.
 
 ### 4.2 Prédictions avec Neuron Network
+
 Modèle NN par défaut
 ```
 fit9 <- nnetar(df_app[,"Power (kW)"],xreg=df_app[,"Temp (C)"])
@@ -239,6 +248,7 @@ fit10 %>% residuals() %>% ggtsdisplay()
 <img width="1440" alt="resfit10" src="https://user-images.githubusercontent.com/114235978/216567572-32102b4b-18f3-4122-956a-e0ed5ea99de9.png">
 
 Comparaison entre le modèle SARIMA et NN
+
 On voit que le modèle SARIMA donne le meilleur résultat que le modèle NN. On choisit donc ce modèle pour faire la prédiction pour le 17/02/2010.
 
 ## 5 Prédiction pour le 17/02/2010 
@@ -263,6 +273,9 @@ write_xlsx(lst2, "pr ́ediction_avec_covariables.xlsx")
 <img width="1148" alt="prediction_avec_covariables" src="https://user-images.githubusercontent.com/114235978/216567667-735d17b2-f9a0-4d17-a3ac-7be0301acf79.png">
 
 ## 6 Conclusion
+
 Pour le modèle sans température, le meilleur modèle est ARIMA(8,1,0)(0,1,1)[96], qui donne un taux d’erreur 8.381082.
+
 Pour le modèle avec température, le meilleur modèle est ARIMA(8,1,1)(0,1,1)[96], qui donne un taux d’erreur 7.443478.
+
 Si on compare ces deux modèles, on voit que le modèle avec température donne le meilleur résultat que le modèle sans température.
