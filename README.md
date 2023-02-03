@@ -155,6 +155,7 @@ fit6 %>% residuals() %>% ggtsdisplay()
 <img width="1440" alt="resfit6" src="https://user-images.githubusercontent.com/114235978/216567211-b0a44b61-607a-461c-8915-d3fcda7a4bf1.png">
 
 Comparaison entre le modèle SARIMA et NN
+
 On voit bien que le modèle SARIMA donne le meilleur résultat que le modèle NN. On choisit donc ce modèle.
 
 ## 4 Prédiction avec température
